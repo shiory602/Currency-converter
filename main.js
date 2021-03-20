@@ -63,7 +63,6 @@ const transfer = (from, to, amount) => {
 		.then(data => {
 			console.log(data);
 
-
 		})
 }
 
