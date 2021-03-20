@@ -45,14 +45,14 @@ function drawBackgroundColor() {
     }
 // END: current chart ////////////////////////////////////////////////////////////////////////////////////////////
 
-// Documentation: https://currencylayer.com/documentation
+// Documentation: https://free.currencyconverterapi.com/
+const ACCESS_KEY = "44f0e557dfbeaab5960a"
+const BASE_URL = "https://free.currconv.com"
+
 let showRate = document.getElementById('showRate');
 
 const transfer = (from, to, amount) => {
-	const ACCESS_KEY = "44f0e557dfbeaab5960a"
-	const BASE_URL = "https://free.currconv.com"
 	let url = `${BASE_URL}/api/v7/convert?q=${from}_${to},${to}_${from}&compact=ultra&apiKey=${ACCESS_KEY}`;
-	// let url = `http://api.currencylayer.com/live?access_key=${ACCESS_KEY}&currencies=USD,EUR,GBP,AUD,NGN,JPN`;
 		fetch(url)
 		.then(res => {
 			if (res.status !== 200) {
@@ -63,9 +63,25 @@ const transfer = (from, to, amount) => {
 		.then(data => {
 			console.log(data);
 
+			allCurrencies();
 		})
 }
 
+// List of all currencies
+const allCurrencies = () => {
+	url = `${BASE_URL}/api/v7/currencies?apiKey=${ACCESS_KEY}`;
+	fetch(url)
+	.then(res => {
+		if (res.status !== 200) {
+			alert(`We have an error ${res.status}`);
+		}
+		return res.json();
+	})
+	.then(data => {
+		console.log(data);
+
+	})
+}
 
 trans.addEventListener("submit", (e) => {
 	e.preventDefault();
