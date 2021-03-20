@@ -1,0 +1,17 @@
+{
+  "name": "wd2w5d4-money",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scss": "node-sass --watch scss -o css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "_id": "wd2w5d4-money@1.0.0",
+  "dependencies": {
+    "node-sass": "^5.0.0"
+  }
+}
