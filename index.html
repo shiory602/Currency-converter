@@ -7,9 +7,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
 	<link rel="stylesheet" href="./css/style.css">
+	<!-- Google font -->
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet">
 	<!-- bootstrap -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+	<!-- jquery ---------------------------------->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -32,13 +37,13 @@
 											<tr>
 												<td class="input-group">
 													<span class="input-group-text">$</span>
-													<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+													<input type="text" id="from-input" class="form-control text-end"
+														aria-label="Amount (to the nearest dollar)">
 												</td>
 												<td>
 													<select class="form-select" aria-label="Choose a Currency">
-														<option selected>Open this select menu</option>
+														<option selected value="CAD" title="Canada Dollar">CAD</option>
 														<option value="USD" title="United States Dollar">USD</option>
-														<option value="CAD" title="Canada Dollar">CAD</option>
 														<option value="JPY" title="Japanese Yen">JPY</option>
 														<option value="AED" title="United Arab Emirates Dirham"> AED </option>
 														<option value="AFN" title="Afghan Afghani"> AFN </option>
@@ -51,14 +56,14 @@
 											<tr>
 												<td class="input-group">
 													<span class="input-group-text">$</span>
-													<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+													<input type="text" id="to-input" class="form-control text-end"
+														aria-label="Amount (to the nearest dollar)" readonly>
 												</td>
 												<td>
 													<select name="currencies" class="form-select" aria-label="Choose a Currency">
-														<option selected>Open this select menu</option>
+														<option selected value="JPY" title="Japanese Yen">JPY</option>
 														<option value="USD" title="United States Dollar">USD</option>
 														<option value="CAD" title="Canada Dollar">CAD</option>
-														<option value="JPY" title="Japanese Yen">JPY</option>
 														<option value="AED" title="United Arab Emirates Dirham"> AED </option>
 														<option value="AFN" title="Afghan Afghani"> AFN </option>
 														<option value="ALL" title="Albanian Lek"> ALL </option>

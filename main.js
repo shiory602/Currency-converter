@@ -17,17 +17,7 @@ function drawBackgroundColor() {
 
       data.addRows([
         [0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
-        [6, 11],  [7, 27],  [8, 33],  [9, 40],  [10, 32], [11, 35],
-        [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
-        [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
-        [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
-        [30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
-        [36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
-        [42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
-        [48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
-        [54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
-        [60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
-        [66, 70], [67, 72], [68, 75], [69, 80]
+        [6, 11],  [7, 27]
       ]);
 
       var options = {
@@ -45,11 +35,15 @@ function drawBackgroundColor() {
     }
 // END: current chart ////////////////////////////////////////////////////////////////////////////////////////////
 
+
 // Documentation: https://free.currencyconverterapi.com/
 const ACCESS_KEY = "44f0e557dfbeaab5960a"
 const BASE_URL = "https://free.currconv.com"
 
 let showRate = document.getElementById('showRate');
+
+let transForm = document.getElementById('trans');
+let fromInput = document.getElementById('from-input');
 
 const transfer = (from, to, amount) => {
 	let url = `${BASE_URL}/api/v7/convert?q=${from}_${to},${to}_${from}&compact=ultra&apiKey=${ACCESS_KEY}`;
@@ -63,11 +57,12 @@ const transfer = (from, to, amount) => {
 		.then(data => {
 			console.log(data);
 
-			allCurrencies();
+			// allCurrencies();
+			HistoricalData("2020-12-10", "2020-12-18");
 		})
 }
 
-// List of all currencies
+// List of all currencies /////////////////////////////////////////////////////
 const allCurrencies = () => {
 	url = `${BASE_URL}/api/v7/currencies?apiKey=${ACCESS_KEY}`;
 	fetch(url)
@@ -82,8 +77,61 @@ const allCurrencies = () => {
 
 	})
 }
+//////////////////////////////////////////////////////////////////////////////////
 
+// Historical Data (Experimental, Date Range) ////////////////////////////////////
+const HistoricalData =(start, end) => {
+	url = `${BASE_URL}/api/v7/convert?apiKey=${ACCESS_KEY}&q=USD_PHP,PHP_USD&compact=ultra&date=${start}&endDate=${end}`;
+	fetch(url)
+	.then(res => {
+		if (res.status !== 200) {
+			alert(`We have an error ${res.status}`);
+		}
+		return res.json();
+	})
+	.then(data => {
+		console.log(data);
+	})
+}
+//////////////////////////////////////////////////////////////////////////////////
+
+// update data every 2 mins
+// let setC;
+// let reloadDisplay = (v) => {
+// 	setC = setTimeout(function () {
+// 		getResults(v);
+// 		reloadDisplay(v);
+// 	}, 120000);
+// }
+
+
+// submit event
 trans.addEventListener("submit", (e) => {
 	e.preventDefault();
-	transfer("CAD", "GBP", 1000);
+	if (fromInput.value) {
+		amount = fromInput.value;
+	transfer("CAD", "GBP", amount);
+	} else {
+		transfer("CAD", "GBP", 1);
+	}
 });
+
+
+// first loaded (default)
+$(document).ready(() => {
+
+	fetch("currency.json")
+	.then(res => {
+		if (res.status !== 200) {
+			alert(`We have an error ${res.status}`);
+		}
+		return res.json();
+	})
+	.then(data => {
+		console.log(data);
+	})
+	
+
+	// transfer();
+	// reloadDisplay();
+})
