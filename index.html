@@ -37,11 +37,11 @@
 											<tr>
 												<td class="input-group">
 													<span class="input-group-text">$</span>
-													<input type="text" id="from-input" class="form-control text-end"
+													<input type="text" value="1" id="from-input" class="form-control text-end"
 														aria-label="Amount (to the nearest dollar)">
 												</td>
 												<td>
-													<select class="form-select" aria-label="Choose a Currency">
+													<select id="from-select" class="form-select" aria-label="Choose a Currency">
 														<option selected value="CAD" title="Canada Dollar">CAD</option>
 														<option value="USD" title="United States Dollar">USD</option>
 														<option value="JPY" title="Japanese Yen">JPY</option>
@@ -60,7 +60,7 @@
 														aria-label="Amount (to the nearest dollar)" readonly>
 												</td>
 												<td>
-													<select name="currencies" class="form-select" aria-label="Choose a Currency">
+													<select id="to-select" class="form-select" aria-label="Choose a Currency">
 														<option selected value="JPY" title="Japanese Yen">JPY</option>
 														<option value="USD" title="United States Dollar">USD</option>
 														<option value="CAD" title="Canada Dollar">CAD</option>
@@ -86,9 +86,6 @@
 							<div id="chart_div" class="currency-ex py-3 d-flex justify-content-center align-items-center"></div>
 						</div>
 					</div>
-
-
-
 
 				</div>
 			</div>
