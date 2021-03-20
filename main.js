@@ -7,32 +7,40 @@
 
 
 // graph of current chart //////////////////////////////////////////////////////////////////////////////////////
-google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.load('current', {
+	packages: ['corechart', 'line']
+});
 google.charts.setOnLoadCallback(drawBackgroundColor);
 
 function drawBackgroundColor() {
-      var data = new google.visualization.DataTable();
-      data.addColumn('number', 'X');
-      data.addColumn('number', 'USD');
+	var data = new google.visualization.DataTable();
+	data.addColumn('number', 'X');
+	data.addColumn('number', 'CAD');
 
-      data.addRows([
-        [0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
-        [6, 11],  [7, 27]
-      ]);
+	data.addRows([
+		[0, 0],
+		[1, 10],
+		[2, 23],
+		[3, 17],
+		[4, 18],
+		[5, 9],
+		[6, 11],
+		[7, 27]
+	]);
 
-      var options = {
-        hAxis: {
-          title: 'Month'
-        },
-        vAxis: {
-          title: 'USD'
-        },
-        backgroundColor: '#f1f8e9'
-      };
+	var options = {
+		hAxis: {
+			title: 'Month'
+		},
+		vAxis: {
+			title: 'CAD'
+		},
+		backgroundColor: '#e9e9e9'
+	};
 
-      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-      chart.draw(data, options);
-    }
+	var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+	chart.draw(data, options);
+}
 // END: current chart ////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -42,12 +50,15 @@ const BASE_URL = "https://free.currconv.com"
 
 let showRate = document.getElementById('showRate');
 
-let transForm = document.getElementById('trans');
+let transForm = document.getElementById('trans'); // trigger button
 let fromInput = document.getElementById('from-input');
+let fromSelect = document.getElementById('from-select');
+let toSelect = document.getElementById('to-select');
 
 const transfer = (from, to, amount) => {
 	let url = `${BASE_URL}/api/v7/convert?q=${from}_${to},${to}_${from}&compact=ultra&apiKey=${ACCESS_KEY}`;
-		fetch(url)
+	url = "transfer.json";
+	fetch(url)
 		.then(res => {
 			if (res.status !== 200) {
 				alert(`We have an error ${res.status}`);
@@ -57,41 +68,44 @@ const transfer = (from, to, amount) => {
 		.then(data => {
 			console.log(data);
 
-			// allCurrencies();
-			HistoricalData("2020-12-10", "2020-12-18");
+			allCurrencies(from, to, amount);
+			HistoricalData(from, to, "2020-12-10", "2020-12-18");
+
 		})
 }
 
 // List of all currencies /////////////////////////////////////////////////////
 const allCurrencies = () => {
 	url = `${BASE_URL}/api/v7/currencies?apiKey=${ACCESS_KEY}`;
+	url = "currency.json";
 	fetch(url)
-	.then(res => {
-		if (res.status !== 200) {
-			alert(`We have an error ${res.status}`);
-		}
-		return res.json();
-	})
-	.then(data => {
-		console.log(data);
+		.then(res => {
+			if (res.status !== 200) {
+				alert(`We have an error ${res.status}`);
+			}
+			return res.json();
+		})
+		.then(data => {
+			console.log(data);
 
-	})
+		})
 }
 //////////////////////////////////////////////////////////////////////////////////
 
 // Historical Data (Experimental, Date Range) ////////////////////////////////////
-const HistoricalData =(start, end) => {
-	url = `${BASE_URL}/api/v7/convert?apiKey=${ACCESS_KEY}&q=USD_PHP,PHP_USD&compact=ultra&date=${start}&endDate=${end}`;
+const HistoricalData = (from, to, start, end) => {
+	url = `${BASE_URL}/api/v7/convert?apiKey=${ACCESS_KEY}&q=${from}_${to},${to}_${from}&compact=ultra&date=${start}&endDate=${end}`;
+	url = "historicalData.json";
 	fetch(url)
-	.then(res => {
-		if (res.status !== 200) {
-			alert(`We have an error ${res.status}`);
-		}
-		return res.json();
-	})
-	.then(data => {
-		console.log(data);
-	})
+		.then(res => {
+			if (res.status !== 200) {
+				alert(`We have an error ${res.status}`);
+			}
+			return res.json();
+		})
+		.then(data => {
+			console.log(data);
+		})
 }
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -109,29 +123,17 @@ const HistoricalData =(start, end) => {
 trans.addEventListener("submit", (e) => {
 	e.preventDefault();
 	if (fromInput.value) {
-		amount = fromInput.value;
-	transfer("CAD", "GBP", amount);
+		let amount = fromInput.value;
+		let from = fromSelect.value;
+		let to = toSelect.value;
+		transfer(from, to, amount);
 	} else {
-		transfer("CAD", "GBP", 1);
+		alert("Please fill out the form.")
 	}
 });
 
 
 // first loaded (default)
 $(document).ready(() => {
-
-	fetch("currency.json")
-	.then(res => {
-		if (res.status !== 200) {
-			alert(`We have an error ${res.status}`);
-		}
-		return res.json();
-	})
-	.then(data => {
-		console.log(data);
-	})
-	
-
-	// transfer();
-	// reloadDisplay();
+	transfer("CAD", "JPY", 1);
 })
