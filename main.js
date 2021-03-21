@@ -50,14 +50,18 @@ const BASE_URL = "https://free.currconv.com"
 
 let showRate = document.getElementById('showRate');
 
+let fcs = document.getElementById("fcs");
+let tcs = document.getElementById("tcs");
+
 let transForm = document.getElementById('trans'); // trigger button
 let fromInput = document.getElementById('from-input');
 let fromSelect = document.getElementById('from-select');
+let toInput = document.getElementById('to-input');
 let toSelect = document.getElementById('to-select');
 
-const transfer = (from, to, amount) => {
+const converter = (from, to, amount) => {
 	let url = `${BASE_URL}/api/v7/convert?q=${from}_${to},${to}_${from}&compact=ultra&apiKey=${ACCESS_KEY}`;
-	url = "transfer.json";
+	// url = "converter.json";
 	fetch(url)
 		.then(res => {
 			if (res.status !== 200) {
@@ -66,18 +70,21 @@ const transfer = (from, to, amount) => {
 			return res.json();
 		})
 		.then(data => {
-			console.log(data);
+			allCurrencies();
+			HistoricalData(from, to, "2021-03-14", "2021-03-22");
 
-			allCurrencies(from, to, amount);
-			HistoricalData(from, to, "2020-12-10", "2020-12-18");
+			showRate.innerHTML = `1 CAD $ = ${(data.CAD_JPY).toFixed(2)}JPY ¥`;
+			// "1 CAD $ = 0.839 JPY"
 
+			// fromInput.innerHTML = (fromInput.value).toFixed(2);
+			toInput.value = (amount * data.CAD_JPY).toFixed(2);
 		})
 }
 
 // List of all currencies /////////////////////////////////////////////////////
 const allCurrencies = () => {
 	url = `${BASE_URL}/api/v7/currencies?apiKey=${ACCESS_KEY}`;
-	url = "currency.json";
+	// url = "currency.json";
 	fetch(url)
 		.then(res => {
 			if (res.status !== 200) {
@@ -86,7 +93,10 @@ const allCurrencies = () => {
 			return res.json();
 		})
 		.then(data => {
-			console.log(data);
+			console.log(data.results.CAD.currencySymbol);
+
+			fcs.innerHTML = data.results.CAD.currencySymbol;
+			tcs.innerHTML = data.results.JPY.currencySymbol;
 
 		})
 }
@@ -126,7 +136,7 @@ trans.addEventListener("submit", (e) => {
 		let amount = fromInput.value;
 		let from = fromSelect.value;
 		let to = toSelect.value;
-		transfer(from, to, amount);
+		converter(from, to, amount);
 	} else {
 		alert("Please fill out the form.")
 	}
@@ -135,5 +145,5 @@ trans.addEventListener("submit", (e) => {
 
 // first loaded (default)
 $(document).ready(() => {
-	transfer("CAD", "JPY", 1);
+	converter("CAD", "JPY", 1);
 })

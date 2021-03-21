@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Pangolin&display=swap");
 * {
+  font-family: 'Pangolin', cursive;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -11,7 +11,6 @@ body {
   text-align: center;
   background-image: url(../img/moneybg.jpg);
   background-size: cover;
-  font-family: 'Pangolin', cursive;
 }
 
 h1 {
