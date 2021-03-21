@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+	<title>Currency Converter</title>
 	<link rel="stylesheet" href="./css/style.css">
 	<!-- Google font -->
 	<link rel="preconnect" href="https://fonts.gstatic.com">
@@ -29,15 +29,15 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-md-6 py-3">
-							<h3 id="showRate" class="py-3">1 USD $ = 0.839 EUR</h3>
+							<h3 id="showRate" class="py-3"></h3>
 							<form id="trans">
 								<div class="currency-ex py-3 d-flex justify-content-center align-items-center">
 									<table>
 										<tbody>
 											<tr>
 												<td class="input-group">
-													<span class="input-group-text">$</span>
-													<input type="text" value="1" id="from-input" class="form-control text-end"
+													<span id="fcs" class="input-group-text"></span>
+													<input type="number" value="1" id="from-input" class="form-control text-end"
 														aria-label="Amount (to the nearest dollar)">
 												</td>
 												<td>
@@ -55,8 +55,8 @@
 											</tr>
 											<tr>
 												<td class="input-group">
-													<span class="input-group-text">$</span>
-													<input type="text" id="to-input" class="form-control text-end"
+													<span id="tcs" class="input-group-text"></span>
+													<input type="number" placeholder="Press Convert button" id="to-input" class="form-control text-end"
 														aria-label="Amount (to the nearest dollar)" readonly>
 												</td>
 												<td>
@@ -78,7 +78,7 @@
 										<button id="switch" class="btn btn-light">⇅</button>
 									</div>
 								</div>
-								<button type="submit" class="py-2 btn btn-dark">Transfer Now</button>
+								<button type="submit" class="py-2 btn btn-dark">Convert</button>
 							</form>
 						</div>
 						<div class="col-md-6 graph">
