@@ -60,6 +60,8 @@ let fromSelect = document.getElementById('from-select');
 let toInput = document.getElementById('to-input');
 let toSelect = document.getElementById('to-select');
 
+let switchButton = document.getElementById("switch");
+
 const converter = (from, to, amount) => {
 	let url = `${BASE_URL}/api/v7/convert?q=${from}_${to},${to}_${from}&compact=ultra&apiKey=${ACCESS_KEY}`;
 	// url = "converter.json";
@@ -93,18 +95,16 @@ const allCurrencies = (from, to, firstF) => {
 			return res.json();
 		})
 		.then(data => {
-			console.log(from + to); // CAD JPY
-			
-
-
 			let defaultNum = 1;
+			// let num = parseFloat(fromInput.value);
+			
 			showRate.innerHTML = `${data.results.CAD.currencySymbol}${(defaultNum).toFixed(2)} ${data.results.CAD.id} = ${data.results.JPY.currencySymbol}${(firstF.CAD_JPY).toFixed(4)} ${data.results.JPY.id}`;
 			// (defaultNum).toLocaleString('en-CA', {style:'currency', currency: 'CAD', currencyDisplay: "code"}) -> CAD 1.00
 			// (firstF.CAD_JPY).toLocaleString('ja-JP', {style:'currency', currency: 'JPY', currencyDisplay: "code"}) -> JPY 87
 			// "1 CAD $ = 0.839 JPY"
 
 			// switch (from to)    //  通貨の部分だけparameterを使いたい　もしくはif/switchしか方法がない？
-			fcs.innerHTML = `data.results.${CAD}.currencySymbol`; //TODO: pass the value from variable
+			fcs.innerHTML = data.results.CAD.currencySymbol; //TODO: pass the value from variable
 			tcs.innerHTML = data.results.JPY.currencySymbol; //TODO: pass the value from variable
 
 		
@@ -147,6 +147,15 @@ const HistoricalData = (from, to, start, end) => {
 // 		reloadDisplay(v);
 // 	}, 120000);
 // }
+
+// switch button
+switchButton.addEventListener("click", (e) => {
+	e.preventDefault();
+	let amount = fromInput.value;
+	let to = fromSelect.value;
+	let from = toSelect.value;
+	converter(from, to, amount);
+});
 
 
 // submit event
