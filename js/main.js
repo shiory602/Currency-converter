@@ -49,7 +49,7 @@ const ACCESS_KEY = "44f0e557dfbeaab5960a"
 const BASE_URL = "https://free.currconv.com"
 
 let showRate = document.getElementById('showRate');
-let defaultNum = 1;
+
 
 let fcs = document.getElementById("fcs");
 let tcs = document.getElementById("tcs");
@@ -71,11 +71,10 @@ const converter = (from, to, amount) => {
 			return res.json();
 		})
 		.then(data => {
-			allCurrencies(from, to);
+			//console.log(data);
+			allCurrencies(from, to, data);
 			HistoricalData(from, to, "2021-03-14", "2021-03-22");
 
-			showRate.innerHTML = `${(defaultNum).toLocaleString('en-CA', {style:'currency', currency: 'CAD', currencyDisplay: "code"})} = ${(data.CAD_JPY).toLocaleString('ja-JP', {style:'currency', currency: 'JPY', currencyDisplay: "code"})}`;
-			// "1 CAD $ = 0.839 JPY"
 
 			// fromInput.innerHTML = (fromInput.value).toFixed(2);
 			toInput.value = (amount * data.CAD_JPY).toFixed(2);
@@ -83,7 +82,7 @@ const converter = (from, to, amount) => {
 }
 
 // List of all currencies /////////////////////////////////////////////////////
-const allCurrencies = (from, to) => {
+const allCurrencies = (from, to, firstF) => {
 	url = `${BASE_URL}/api/v7/currencies?apiKey=${ACCESS_KEY}`;
 	// url = "currency.json";
 	fetch(url)
@@ -95,19 +94,29 @@ const allCurrencies = (from, to) => {
 		})
 		.then(data => {
 			console.log(from + to); // CAD JPY
+			
 
-			fcs.innerHTML = data.results.CAD.currencySymbol;
-			tcs.innerHTML = data.results.JPY.currencySymbol;
 
+			let defaultNum = 1;
+			showRate.innerHTML = `${data.results.CAD.currencySymbol}${(defaultNum).toFixed(2)} ${data.results.CAD.id} = ${data.results.JPY.currencySymbol}${(firstF.CAD_JPY).toFixed(4)} ${data.results.JPY.id}`;
+			// (defaultNum).toLocaleString('en-CA', {style:'currency', currency: 'CAD', currencyDisplay: "code"}) -> CAD 1.00
+			// (firstF.CAD_JPY).toLocaleString('ja-JP', {style:'currency', currency: 'JPY', currencyDisplay: "code"}) -> JPY 87
+			// "1 CAD $ = 0.839 JPY"
+
+			// switch (from to)    //  通貨の部分だけparameterを使いたい　もしくはif/switchしか方法がない？
+			fcs.innerHTML = `data.results.${CAD}.currencySymbol`; //TODO: pass the value from variable
+			tcs.innerHTML = data.results.JPY.currencySymbol; //TODO: pass the value from variable
+
+		
 			const arrKeys = Object.keys(data.results);
 			const rates = data.results;
-			console.log(rates);
-			arrKeys.map(item => {
-				return html += `<option value=${item}>${item}</option>`;
-			});
-			for(let i = 0; i < select.length; i++) {
-				select[i].innerHTML = html;
-			}
+			//console.log(rates);
+			// arrKeys.map(item => {
+			// 	return html += `<option value=${item}>${item}</option>`;
+			// });
+			// for(let i = 0; i < select.length; i++) {
+			// 	select[i].innerHTML = html;
+			// }
 
 		})
 }
@@ -116,7 +125,7 @@ const allCurrencies = (from, to) => {
 // Historical Data (Experimental, Date Range) ////////////////////////////////////
 const HistoricalData = (from, to, start, end) => {
 	url = `${BASE_URL}/api/v7/convert?apiKey=${ACCESS_KEY}&q=${from}_${to},${to}_${from}&compact=ultra&date=${start}&endDate=${end}`;
-	url = "historicalData.json";
+	// url = "historicalData.json";
 	fetch(url)
 		.then(res => {
 			if (res.status !== 200) {
@@ -125,7 +134,7 @@ const HistoricalData = (from, to, start, end) => {
 			return res.json();
 		})
 		.then(data => {
-			console.log(data);
+		//	console.log(data);
 		})
 }
 //////////////////////////////////////////////////////////////////////////////////

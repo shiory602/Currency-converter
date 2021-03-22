@@ -20,6 +20,11 @@ h1 {
 	color: #fff;
 	background-color: #373737
 }
+@media screen and (max-width:480px) {
+	h1 {
+		width: 300px;
+	}
+}
 
 .box {
 	background-color: rgba(255, 255, 255, 0.7);
