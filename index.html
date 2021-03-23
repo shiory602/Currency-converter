@@ -21,17 +21,17 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 mt-5 py-5 shadow">
-				<h1>Money Exchange Rate</h1>
+				<h1>Currency Converter</h1>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-12 py-5 shadow box">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-md-6 py-3">
+						<div class="col-md-6 py-3 px-0">
 							<h3 id="showRate" class="py-3"></h3>
 							<form id="trans">
-								<div class="currency-ex py-3 d-flex justify-content-center align-items-center">
+								<div class="currency-ex py-3 px-0 d-flex justify-content-center align-items-center">
 									<table>
 										<tbody>
 											<tr>
@@ -74,15 +74,16 @@
 											</tr>
 										</tbody>
 									</table>
-									<div class="py-3">
-										<button id="switch-btn" class="btn btn-light">⇅</button>
-										<!-- <a id="switch" class="btn btn-light">⇅</a> -->
-									</div>
 								</div>
 								<button type="submit" id="convert-btn" class="py-2 btn btn-dark">Convert</button>
 							</form>
 						</div>
-						<div class="col-md-6 graph">
+
+						<div class="col-md-1 px-0 align-self-center">
+							<button id="switch" class="btn btn-light" onclick=switchFunc();>⇅</button>
+							<!-- <a id="switch" class="btn btn-light">⇅</a> -->
+						</div>
+						<div class="col-md-5 px-3 graph">
 							<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 							<div id="chart_div" class="currency-ex py-3 d-flex justify-content-center align-items-center"></div>
 						</div>

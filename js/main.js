@@ -73,7 +73,7 @@ const converter = (from, to, amount) => {
 			return res.json();
 		})
 		.then(data => {
-			//console.log(data);
+			console.log(data);
 			allCurrencies(from, to, data);
 			HistoricalData(from, to, "2021-03-14", "2021-03-22");
 
@@ -153,14 +153,20 @@ const HistoricalData = (from, to, start, end) => {
 // }
 
 // switch button
-// switchButton.addEventListener("click", (e) => {
-// 	e.preventDefault();
-// 	let amount = fromInput.value;
-// 	let to = fromSelect.value;
-// 	let from = toSelect.value;
-// 	converter(from, to, amount);
-// });
-
+	let switchFunc = () => {
+		let from = fromSelect.value;
+		let to = toSelect.value;
+		let fromAmount = fromInput.value;
+		let toAmount = toInput.value;
+		let fromCurrencySymbol = fcs.innerHTML;
+		let toCurrencySymbol = tcs.innerHTML;
+		toSelect.value = from;
+		fromSelect.value = to;
+		fromInput.value = toAmount;
+		toInput.value = fromAmount;
+		fcs.value = toCurrencySymbol; // undefined
+		tcs.value = fromCurrencySymbol; // undefined
+	}
 
 // submit event
 trans.addEventListener("submit", (e) => {

@@ -1,4 +1,3 @@
-
 * {
 	font-family: 'Pangolin', cursive;
 	margin: 0;
@@ -20,10 +19,15 @@ h1 {
 	color: #fff;
 	background-color: #373737
 }
+
 @media screen and (max-width:480px) {
 	h1 {
 		width: 300px;
 	}
+}
+
+#showRate {
+	overflow-x: auto;
 }
 
 .box {
