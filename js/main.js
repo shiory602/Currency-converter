@@ -164,8 +164,8 @@ const HistoricalData = (from, to, start, end) => {
 		fromSelect.value = to;
 		fromInput.value = toAmount;
 		toInput.value = fromAmount;
-		fcs.value = toCurrencySymbol; // undefined
-		tcs.value = fromCurrencySymbol; // undefined
+		fcs.innerHTML = toCurrencySymbol; // undefined
+		tcs.innerHTML = fromCurrencySymbol; // undefined
 	}
 
 // submit event
