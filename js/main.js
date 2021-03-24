@@ -1,57 +1,11 @@
-// // 変換を実行(日本円)
-// let jpy_price1 = price1.toLocaleString('ja-JP', {style:'currency', currency: 'JPY'});
-
-// // 変換を実行(米ドル)
-// let usd_price1 = price1.toLocaleString('en-US', {style:'currency', currency: 'USD'});
-
-
-
-// graph of current chart //////////////////////////////////////////////////////////////////////////////////////
-google.charts.load('current', {
-	packages: ['corechart', 'line']
-});
-google.charts.setOnLoadCallback(drawBackgroundColor);
-
-function drawBackgroundColor() {
-	var data = new google.visualization.DataTable();
-	data.addColumn('number', 'X');
-	data.addColumn('number', 'CAD');
-
-	data.addRows([
-		[0, 0],
-		[1, 10],
-		[2, 23],
-		[3, 17],
-		[4, 18],
-		[5, 9],
-		[6, 11],
-		[7, 27]
-	]);
-
-	var options = {
-		hAxis: {
-			title: 'Month'
-		},
-		vAxis: {
-			title: 'CAD'
-		},
-		backgroundColor: '#e9e9e9'
-	};
-
-	var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-	chart.draw(data, options);
-}
-// END: current chart ////////////////////////////////////////////////////////////////////////////////////////////
-
-
+// START: Main current currencies /////////////////////////////////////////////////////
 // Documentation: https://free.currencyconverterapi.com/
 const ACCESS_KEY = "44f0e557dfbeaab5960a"
 const BASE_URL = "https://free.currconv.com"
 
-let showRate = document.getElementById('showRate');
+let showRate = document.getElementById('showRate'); // １行目のライン
 
-
-let fcs = document.getElementById("fcs");
+let fcs = document.getElementById("fcs"); // シンボル
 let tcs = document.getElementById("tcs");
 
 let transForm = document.getElementById('trans'); // trigger button
@@ -73,16 +27,16 @@ const converter = (from, to, amount) => {
 			return res.json();
 		})
 		.then(data => {
-			console.log(data);
 			allCurrencies(from, to, data);
 			HistoricalData(from, to, "2021-03-14", "2021-03-22");
 
 			toInput.value = (amount * data.CAD_JPY).toFixed(2);
 		})
 }
+// END: Main current currencies /////////////////////////////////////////////////////
 
-// List of all currencies /////////////////////////////////////////////////////
-const allCurrencies = (from, to, firstF) => {
+// START: List of all currencies /////////////////////////////////////////////////////
+const allCurrencies = (from, to, firstFunction) => {
 	url = `${BASE_URL}/api/v7/currencies?apiKey=${ACCESS_KEY}`;
 	url = "currency.json";
 	fetch(url)
@@ -93,9 +47,9 @@ const allCurrencies = (from, to, firstF) => {
 			return res.json();
 		})
 		.then(data => {
-			let defaultNum = 1;
-			// let num = parseFloat(fromInput.value);
+			console.log(data);
 
+			let defaultNum = 1;
 			let fromc = from;
 			let toc = to;
 			let fromCurrencySymbol = data.results[fromc].currencySymbol;
@@ -103,30 +57,18 @@ const allCurrencies = (from, to, firstF) => {
 			let fromCurrencyId = data.results[fromc].id;
 			let toCurrencyId = data.results[toc].id;
 
-			showRate.innerHTML = `${fromCurrencySymbol}${(defaultNum).toFixed(2)} ${fromCurrencyId} = ${toCurrencySymbol}${(firstF.CAD_JPY).toFixed(4)} ${toCurrencyId}`;
+			showRate.innerHTML = `${fromCurrencySymbol}${(defaultNum).toFixed(2)} ${fromCurrencyId} = ${toCurrencySymbol}${(firstFunction.CAD_JPY).toFixed(4)} ${toCurrencyId}`;
 			// (defaultNum).toLocaleString('en-CA', {style:'currency', currency: 'CAD', currencyDisplay: "code"}) -> CAD 1.00
 			// (firstF.CAD_JPY).toLocaleString('ja-JP', {style:'currency', currency: 'JPY', currencyDisplay: "code"}) -> JPY 87
 			// "1 CAD $ = 0.839 JPY"
 
 			fcs.innerHTML = fromCurrencySymbol;
 			tcs.innerHTML = toCurrencySymbol;
-
-
-			const arrKeys = Object.keys(data.results);
-			const rates = data.results;
-			//console.log(rates);
-			// arrKeys.map(item => {
-			// 	return html += `<option value=${item}>${item}</option>`;
-			// });
-			// for(let i = 0; i < select.length; i++) {
-			// 	select[i].innerHTML = html;
-			// }
-
 		})
 }
-//////////////////////////////////////////////////////////////////////////////////
+// END: List of all currencies /////////////////////////////////////////////////////
 
-// Historical Data (Experimental, Date Range) ////////////////////////////////////
+// START: Historical Data (Experimental, Date Range) ////////////////////////////////////
 const HistoricalData = (from, to, start, end) => {
 	url = `${BASE_URL}/api/v7/convert?apiKey=${ACCESS_KEY}&q=${from}_${to},${to}_${from}&compact=ultra&date=${start}&endDate=${end}`;
 	url = "historicalData.json";
@@ -138,10 +80,61 @@ const HistoricalData = (from, to, start, end) => {
 			return res.json();
 		})
 		.then(data => {
-			//	console.log(data);
+			drawChart(data);
 		})
 }
-//////////////////////////////////////////////////////////////////////////////////
+// END: Historical Data (Experimental, Date Range) ////////////////////////////////////
+
+
+// START: current date and time //////////////////////////////////////////////////////////////////////////////////////
+let now = new Date();
+
+function LoadProc() {
+	var target = document.getElementById("DateTimeDisp");
+
+	var Year = now.getFullYear();
+	var Month = now.getMonth() + 1;
+	var Date = now.getDate();
+	var Hour = now.getHours();
+	var Min = now.getMinutes();
+	var Sec = now.getSeconds();
+
+	target.innerHTML = `Updated: ${Hour}:${Min}:${Sec}, ${Date}/${Month}/${Year}`;
+}
+// END: current date and time //////////////////////////////////////////////////////////////////////////////////////
+
+// START: graph of current chart //////////////////////////////////////////////////////////////////////////////////////
+// Visualization API と折れ線グラフ用のパッケージのロード
+google.charts.load('current', {
+	'packages': ['corechart']
+});
+// Google Visualization API ロード時のコールバック関数の設定
+google.charts.setOnLoadCallback(drawChart);
+// グラフ作成用のコールバック関数
+function drawChart(data) {
+	// データテーブルの作成
+	var data = google.visualization.arrayToDataTable([
+		['Date', 'CAD-JPY'],
+		// [data.CAD_JPY, data.CAD_JPY.2021-03-14],
+		['03-16', 87.468623],
+		['03-18', 87.622879],
+		['03-20', 87.869315]
+	]);
+	// グラフのオプションを設定
+	var options = {
+		// title: 'Updated: 1:13 p.m., Mar 24, 2021',
+		curveType: 'function',
+		legend: {
+			position: 'bottom'
+		}
+	};
+	// LineChart のオブジェクトの作成
+	var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+	// データテーブルとオプションを渡して、グラフを描画
+	chart.draw(data, options);
+}
+// END: graph of current chart ////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // update data every 2 mins
 // let setC;
@@ -152,23 +145,26 @@ const HistoricalData = (from, to, start, end) => {
 // 	}, 120000);
 // }
 
-// switch button
-	let switchFunc = () => {
-		let from = fromSelect.value;
-		let to = toSelect.value;
-		let fromAmount = fromInput.value;
-		let toAmount = toInput.value;
-		let fromCurrencySymbol = fcs.innerHTML;
-		let toCurrencySymbol = tcs.innerHTML;
-		toSelect.value = from;
-		fromSelect.value = to;
-		fromInput.value = toAmount;
-		toInput.value = fromAmount;
-		fcs.innerHTML = toCurrencySymbol; // undefined
-		tcs.innerHTML = fromCurrencySymbol; // undefined
-	}
+// START: switch button //////////////////////////////////////////////////////////////
+let switchFunc = () => {
+	let from = fromSelect.value;
+	let to = toSelect.value;
+	// let fromAmount = fromInput.value;
+	// let toAmount = toInput.value;
+	let fromCurrencySymbol = fcs.innerHTML;
+	let toCurrencySymbol = tcs.innerHTML;
 
-// submit event
+	converter(to, from, toInput.value);
+	toSelect.value = from;
+	fromSelect.value = to;
+	// fromInput.value = toAmount;
+	// toInput.value = fromAmount;
+	fcs.innerHTML = toCurrencySymbol;
+	tcs.innerHTML = fromCurrencySymbol;
+}
+// END: switch button //////////////////////////////////////////////////////////////
+
+// START: submit event ////////////////////////////////////////////////////////////////
 trans.addEventListener("submit", (e) => {
 	e.preventDefault();
 	if (fromInput.value) {
@@ -180,9 +176,11 @@ trans.addEventListener("submit", (e) => {
 		alert("Please fill out the form.")
 	}
 });
+// END: submit event ////////////////////////////////////////////////////////////////
 
 
-// first loaded (default)
+// START: first loaded (default) ///////////////////////////////////////////////////
 $(document).ready(() => {
 	converter("CAD", "JPY", 1);
 })
+// END: first loaded (default) ///////////////////////////////////////////////////
