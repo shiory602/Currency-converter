@@ -9,9 +9,9 @@ let tcs = document.getElementById("tcs");
 
 let transForm = document.getElementById('trans'); // trigger button
 let fromInput = document.getElementById('from-input');
-let fromSelect = document.getElementById('from-select');
 let toInput = document.getElementById('to-input');
-let toSelect = document.getElementById('to-select');
+let select = document.querySelectorAll('select');
+let html = "";
 
 let switchButton = document.getElementById("switch");
 
@@ -29,8 +29,6 @@ const converter = (from, to, amount) => {
 		.then(data => {
 			allCurrencies(from, to, data);
 			HistoricalData(from, to, "2021-03-14", "2021-03-22");
-
-			toInput.value = (fromInput.value * data.CAD_JPY).toFixed(2); //                   あとで治す
 		})
 }
 // END: Main current currencies /////////////////////////////////////////////////////
@@ -47,23 +45,34 @@ const allCurrencies = (from, to, firstFunction) => {
 			return res.json();
 		})
 		.then(data => {
-			console.log(data);
-
+			
 			let defaultNum = 1;
 			let fromc = from;
 			let toc = to;
 			let fromCurrencySymbol = data.results[fromc].currencySymbol;
 			let toCurrencySymbol = data.results[toc].currencySymbol;
-			let fromCurrencyId = data.results[fromc].id;
-			let toCurrencyId = data.results[toc].id;
+			let currencyName = data.results[fromc].currencyName;
+			let fromTo = `${from}_${to}`;
+			let fromToRate = firstFunction[fromTo];
 
-			showRate.innerHTML = `${fromCurrencySymbol}${(defaultNum).toFixed(2)} ${fromCurrencyId} = ${toCurrencySymbol}${(firstFunction.CAD_JPY).toFixed(4)} ${toCurrencyId}`;
-			// (defaultNum).toLocaleString('en-CA', {style:'currency', currency: 'CAD', currencyDisplay: "code"}) -> CAD 1.00
-			// (firstF.CAD_JPY).toLocaleString('ja-JP', {style:'currency', currency: 'JPY', currencyDisplay: "code"}) -> JPY 87
+			let arrKeys = Object.keys(data.results);
+			arrKeys.map(item => {
+				return html += `<option value="${item}" title="${currencyName}">${item}</option>`
+			});
+			for (let i = 0; i < select.length; i++) {
+				select[i].innerHTML = html;
+			}
+			
+			console.log(select[1].value);
+			
+
+			showRate.innerHTML = `${fromCurrencySymbol}${(defaultNum).toFixed(2)} ${from} = ${toCurrencySymbol}${(fromToRate).toFixed(4)} ${to}`;
 			// "1 CAD $ = 0.839 JPY"
 
 			fcs.innerHTML = fromCurrencySymbol;
 			tcs.innerHTML = toCurrencySymbol;
+
+			toInput.value = (fromInput.value * fromToRate).toFixed();
 		})
 }
 // END: List of all currencies /////////////////////////////////////////////////////
@@ -99,12 +108,13 @@ function LoadProc() {
 	var Min = now.getMinutes();
 	var Sec = now.getSeconds();
 
-	target.innerHTML = `Updated: ${Hour}:${Min}:${Sec}, ${Date}/${Month}/${Year}`;
+	target.innerHTML = `Graph updated: ${Hour}:${Min}:${Sec}, ${Date}/${Month}/${Year}`;
 }
 // END: current date and time //////////////////////////////////////////////////////////////////////////////////////
 
 // START: graph of current chart //////////////////////////////////////////////////////////////////////////////////////
 // Documentation: https://developers.google.com/chart/interactive/docs/gallery/linechart
+// get API data: https://developers.google.com/chart/interactive/docs/reference#arraytodatatable
 // Visualization API と折れ線グラフ用のパッケージのロード
 google.charts.load('current', {
 	'packages': ['corechart']
@@ -116,7 +126,7 @@ function drawChart() {
 	// データテーブルの作成
 	var data = google.visualization.arrayToDataTable([
 		['Date', 'CAD-JPY'],
-		// [data.CAD_JPY, data.CAD_JPY.2021-03-14],
+		['03-15', 87.369315],
 		['03-16', 87.468623],
 		['03-18', 87.622879],
 		['03-20', 87.869315]
@@ -124,7 +134,7 @@ function drawChart() {
 	// グラフのオプションを設定
 	var options = {
 		// title: 'Updated: 1:13 p.m., Mar 24, 2021',
-		curveType: 'function',
+		// curveType: 'function',
 		legend: {
 			position: 'bottom'
 		}
@@ -137,13 +147,13 @@ function drawChart() {
 // END: graph of current chart ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// update data every 2 mins
+// // update data every 30 mins
 // let setC;
 // let reloadDisplay = (v) => {
 // 	setC = setTimeout(function () {
 // 		getResults(v);
 // 		reloadDisplay(v);
-// 	}, 120000);
+// 	}, 180000);
 // }
 
 // START: switch button //////////////////////////////////////////////////////////////

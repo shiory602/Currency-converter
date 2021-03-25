@@ -27,11 +27,11 @@
 		<div class="row">
 			<div class="col-md-12 py-5 shadow box">
 				<div class="container-fluid">
-					<div class="row">
+					<div class="row align-items-center justify-content-center">
 						<div class="col-md-5 py-3 px-0">
 							<h3 id="showRate" class="py-3"></h3>
 							<form id="trans">
-								<div class="currency-ex py-3 px-0 d-flex justify-content-center align-items-center">
+								<div class="currency-ex py-3 px-0 d-flex justify-content-center">
 									<table>
 										<tbody>
 											<tr>
@@ -41,15 +41,8 @@
 														aria-label="Amount (to the nearest dollar)">
 												</td>
 												<td>
-													<select id="from-select" class="form-select" aria-label="Choose a Currency">
-														<option selected value="CAD" title="Canada Dollar">CAD</option>
-														<option value="USD" title="United States Dollar">USD</option>
-														<option value="JPY" title="Japanese Yen">JPY</option>
-														<option value="AED" title="United Arab Emirates Dirham"> AED </option>
-														<option value="AFN" title="Afghan Afghani"> AFN </option>
-														<option value="ALL" title="Albanian Lek"> ALL </option>
-														<option value="AMD" title="Armenian Dram">AMD </option>
-														<option value="ANG" title="Netherlands Antillean Guilder"> ANG </option>
+													<select class="form-select">
+														<!-- <option value="Currency">Currency</option> -->
 													</select>
 												</td>
 											</tr>
@@ -60,16 +53,9 @@
 														aria-label="Amount (to the nearest dollar)" readonly>
 												</td>
 												<td>
-													<select id="to-select" class="form-select" aria-label="Choose a Currency">
-														<option selected value="JPY" title="Japanese Yen">JPY</option>
-														<option value="USD" title="United States Dollar">USD</option>
-														<option value="CAD" title="Canada Dollar">CAD</option>
-														<option value="AED" title="United Arab Emirates Dirham"> AED </option>
-														<option value="AFN" title="Afghan Afghani"> AFN </option>
-														<option value="ALL" title="Albanian Lek"> ALL </option>
-														<option value="AMD" title="Armenian Dram">AMD </option>
-														<option value="ANG" title="Netherlands Antillean Guilder"> ANG </option>
-													</select>
+													<select class="form-select">
+													<!-- <option value="Currency">Currency</option> -->
+												</select>
 												</td>
 											</tr>
 										</tbody>
@@ -79,15 +65,15 @@
 							</form>
 						</div>
 
-						<div class="col-md-2 px-0 align-self-center text-start">
+						<div class="col-md-1 px-0 text-start">
 							<button id="switch" class="btn btn-light" onclick=switchFunc();>⇅</button>
 							<!-- <a id="switch" class="btn btn-light">⇅</a> -->
 						</div>
-						<div class="col-md-5 px-3 graph">
+						<div class="col-md-5 offset-col-md-1 px-3 graph justify-content-end">
 							<!-- AJAX API のロード -->
 							<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 							<!-- グラフを描く div 要素 -->
-							<div id="curve_chart" class="currency-ex py-3 d-flex justify-content-center align-items-center"
+							<div id="curve_chart" class="currency-ex py-3 d-flex"
 								style="width: 400px; height: 300px"></div>
 							<h3 id="DateTimeDisp" class="py-3"></h3>
 						</div>
