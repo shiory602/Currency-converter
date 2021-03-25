@@ -1,4 +1,3 @@
-// START: Main current currencies /////////////////////////////////////////////////////
 // Documentation: https://free.currencyconverterapi.com/
 const ACCESS_KEY = "44f0e557dfbeaab5960a"
 const BASE_URL = "https://free.currconv.com"
@@ -16,6 +15,7 @@ let toSelect = document.getElementById('to-select');
 
 let switchButton = document.getElementById("switch");
 
+// START: Main current currencies /////////////////////////////////////////////////////
 const converter = (from, to, amount) => {
 	let url = `${BASE_URL}/api/v7/convert?q=${from}_${to},${to}_${from}&compact=ultra&apiKey=${ACCESS_KEY}`;
 	url = "converter.json";
@@ -30,7 +30,7 @@ const converter = (from, to, amount) => {
 			allCurrencies(from, to, data);
 			HistoricalData(from, to, "2021-03-14", "2021-03-22");
 
-			toInput.value = (amount * data.CAD_JPY).toFixed(2);
+			toInput.value = (fromInput.value * data.CAD_JPY).toFixed(2); //                   あとで治す
 		})
 }
 // END: Main current currencies /////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ const HistoricalData = (from, to, start, end) => {
 			return res.json();
 		})
 		.then(data => {
-			drawChart(data);
+			// １週間分のデータ
 		})
 }
 // END: Historical Data (Experimental, Date Range) ////////////////////////////////////
@@ -104,6 +104,7 @@ function LoadProc() {
 // END: current date and time //////////////////////////////////////////////////////////////////////////////////////
 
 // START: graph of current chart //////////////////////////////////////////////////////////////////////////////////////
+// Documentation: https://developers.google.com/chart/interactive/docs/gallery/linechart
 // Visualization API と折れ線グラフ用のパッケージのロード
 google.charts.load('current', {
 	'packages': ['corechart']
@@ -111,7 +112,7 @@ google.charts.load('current', {
 // Google Visualization API ロード時のコールバック関数の設定
 google.charts.setOnLoadCallback(drawChart);
 // グラフ作成用のコールバック関数
-function drawChart(data) {
+function drawChart() {
 	// データテーブルの作成
 	var data = google.visualization.arrayToDataTable([
 		['Date', 'CAD-JPY'],
@@ -181,6 +182,6 @@ trans.addEventListener("submit", (e) => {
 
 // START: first loaded (default) ///////////////////////////////////////////////////
 $(document).ready(() => {
-	converter("CAD", "JPY", 1);
+	converter("CAD", "JPY", 0);
 })
 // END: first loaded (default) ///////////////////////////////////////////////////
