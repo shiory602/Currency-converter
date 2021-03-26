@@ -11,6 +11,8 @@ let transForm = document.querySelector('#trans'); // trigger button
 let fromInput = document.querySelector('#input1');
 let toInput = document.querySelector('#input2');
 let select = document.querySelectorAll('select');
+let fromSelect = document.querySelector('#from-select');
+let toSelect = document.querySelector('#to-select');
 let html = "";
 
 let switchButton = document.querySelector("#switch");
@@ -18,7 +20,7 @@ let switchButton = document.querySelector("#switch");
 // START: Main current currencies /////////////////////////////////////////////////////
 const converter = (from, to) => {
 	let url = `${BASE_URL}/api/v7/convert?q=${from}_${to},${to}_${from}&compact=ultra&apiKey=${ACCESS_KEY}`;
-	url = "converter.json";
+	// url = "converter.json";
 	fetch(url)
 		.then(res => {
 			if (res.status !== 200) {
@@ -35,8 +37,8 @@ const converter = (from, to) => {
 
 // START: List of all currencies /////////////////////////////////////////////////////
 const allCurrencies = (from, to, rate) => {
-	url = `${BASE_URL}/api/v7/currencies?apiKey=${ACCESS_KEY}`;
-	url = "currency.json";
+	let url = `${BASE_URL}/api/v7/currencies?apiKey=${ACCESS_KEY}`;
+	// url = "currency.json";
 	fetch(url)
 		.then(res => {
 			if (res.status !== 200) {
@@ -58,50 +60,30 @@ const allCurrencies = (from, to, rate) => {
 			let fromToRate = rate[fromTo];
 
 			// 通貨 options --------------------------------------------------------------------
-			let arrKeys = Object.keys(data.results);
-			arrKeys.map(item => {
-				return html += `<option value="${item}" title="${currencyName}">${item}</option>`
-			});
-			for (let i = 0; i < select.length; i++) {
-				select[i].innerHTML = html;
+			if (select[0].innerHTML === "") {
+				let arrKeys = Object.keys(data.results);
+				arrKeys.sort();
+				arrKeys.map(item => {
+					return html += `<option value="${item}" title="${currencyName}">${item}</option>`
+				});
+				for (let i = 0; i < select.length; i++) {
+					select[i].innerHTML = html;
+				}
+				select[0].value = "CAD";
+				select[1].value = "JPY";
 			}
 			// ---------------------------------------------------------------------------------
 
 
 			
 			// input --------------------------------------------------------------------------
-			let arrRate = Object.values(rate);
-			console.log(rate); // undefined
 			
-			fromInput.value = defaultNum;
-			toInput.value = (fromInput.value * fromToRate).toFixed(2);
-			// function convert(i, j) {
-			// 	input[i].value = input[j].value * arrRate[i].value / arrRate[j].value;
-			// }
-
-			// input[0].addEventListener("keyup", () => convert(1, 0));
-			// // input[0].addEventListener("keyup", () => {
-			// // 	input[1].value = input[0].value * arrRate[1].value / arrRate[0].value;
-			// // })
-
-			// input[1].addEventListener("keyup", () => convert(0, 1));
-			// // input[1].addEventListener("keyup", () => {
-			// // 	input[0].value = input[1].value * arrRate[0].value / arrRate[1].value;
-			// // })
-			
-			// input[0].addEventListener("change", () => convert(1, 0));
-			// // select[0].addEventListener("change", () => {
-			// // 	input[1].value = input[0].value * arrRate[1].value / arrRate[0].value;
-			// // })
-
-			// input[1].addEventListener("change", () => convert(0, 1));
-			// // select[1].addEventListener("change", () => {
-			// // 	input[0].value = input[1].value * arrRate[0].value / arrRate[1].value;
-			// // })
+			fromInput.value = (defaultNum).toFixed(4);
+			toInput.value = (fromInput.value * fromToRate).toFixed(4);
 			// ---------------------------------------------------------------------------------
 			
 
-			showRate.innerHTML = `${fromCurrencySymbol}${(defaultNum).toFixed(2)} ${from} = ${toCurrencySymbol}${(fromToRate).toFixed(4)} ${to}`;
+			showRate.innerHTML = `${fromCurrencySymbol}${(defaultNum).toFixed(4)} ${from} = ${toCurrencySymbol}${(fromToRate).toFixed(4)} ${to}`;
 			// "1 CAD $ = 0.839 JPY"
 
 			fcs.innerHTML = fromCurrencySymbol;
@@ -113,8 +95,8 @@ const allCurrencies = (from, to, rate) => {
 
 // START: Historical Data (Experimental, Date Range) ////////////////////////////////////
 const HistoricalData = (from, to, start, end) => {
-	url = `${BASE_URL}/api/v7/convert?apiKey=${ACCESS_KEY}&q=${from}_${to},${to}_${from}&compact=ultra&date=${start}&endDate=${end}`;
-	url = "historicalData.json";
+	let url = `${BASE_URL}/api/v7/convert?apiKey=${ACCESS_KEY}&q=${from}_${to},${to}_${from}&compact=ultra&date=${start}&endDate=${end}`;
+	// url = "historicalData.json";
 	fetch(url)
 		.then(res => {
 			if (res.status !== 200) {
