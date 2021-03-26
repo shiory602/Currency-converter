@@ -2,21 +2,21 @@
 const ACCESS_KEY = "44f0e557dfbeaab5960a"
 const BASE_URL = "https://free.currconv.com"
 
-let showRate = document.getElementById('showRate'); // １行目のライン
+let showRate = document.querySelector('#showRate'); // １行目のライン
 
-let fcs = document.getElementById("fcs"); // シンボル
-let tcs = document.getElementById("tcs");
+let fcs = document.querySelector("#fcs"); // シンボル
+let tcs = document.querySelector("#tcs");
 
-let transForm = document.getElementById('trans'); // trigger button
-let fromInput = document.getElementById('from-input');
-let toInput = document.getElementById('to-input');
+let transForm = document.querySelector('#trans'); // trigger button
+let fromInput = document.querySelector('#input1');
+let toInput = document.querySelector('#input2');
 let select = document.querySelectorAll('select');
 let html = "";
 
-let switchButton = document.getElementById("switch");
+let switchButton = document.querySelector("#switch");
 
 // START: Main current currencies /////////////////////////////////////////////////////
-const converter = (from, to, amount) => {
+const converter = (from, to) => {
 	let url = `${BASE_URL}/api/v7/convert?q=${from}_${to},${to}_${from}&compact=ultra&apiKey=${ACCESS_KEY}`;
 	url = "converter.json";
 	fetch(url)
@@ -34,7 +34,7 @@ const converter = (from, to, amount) => {
 // END: Main current currencies /////////////////////////////////////////////////////
 
 // START: List of all currencies /////////////////////////////////////////////////////
-const allCurrencies = (from, to, firstFunction) => {
+const allCurrencies = (from, to, rate) => {
 	url = `${BASE_URL}/api/v7/currencies?apiKey=${ACCESS_KEY}`;
 	url = "currency.json";
 	fetch(url)
@@ -45,7 +45,9 @@ const allCurrencies = (from, to, firstFunction) => {
 			return res.json();
 		})
 		.then(data => {
-			
+			console.log(data);
+			console.log(rate);
+
 			let defaultNum = 1;
 			let fromc = from;
 			let toc = to;
@@ -53,8 +55,9 @@ const allCurrencies = (from, to, firstFunction) => {
 			let toCurrencySymbol = data.results[toc].currencySymbol;
 			let currencyName = data.results[fromc].currencyName;
 			let fromTo = `${from}_${to}`;
-			let fromToRate = firstFunction[fromTo];
+			let fromToRate = rate[fromTo];
 
+			// 通貨 options --------------------------------------------------------------------
 			let arrKeys = Object.keys(data.results);
 			arrKeys.map(item => {
 				return html += `<option value="${item}" title="${currencyName}">${item}</option>`
@@ -62,8 +65,40 @@ const allCurrencies = (from, to, firstFunction) => {
 			for (let i = 0; i < select.length; i++) {
 				select[i].innerHTML = html;
 			}
+			// ---------------------------------------------------------------------------------
+
+
 			
-			console.log(select[1].value);
+			// input --------------------------------------------------------------------------
+			let arrRate = Object.values(rate);
+			console.log(rate); // undefined
+			
+			fromInput.value = defaultNum;
+			toInput.value = (fromInput.value * fromToRate).toFixed(2);
+			// function convert(i, j) {
+			// 	input[i].value = input[j].value * arrRate[i].value / arrRate[j].value;
+			// }
+
+			// input[0].addEventListener("keyup", () => convert(1, 0));
+			// // input[0].addEventListener("keyup", () => {
+			// // 	input[1].value = input[0].value * arrRate[1].value / arrRate[0].value;
+			// // })
+
+			// input[1].addEventListener("keyup", () => convert(0, 1));
+			// // input[1].addEventListener("keyup", () => {
+			// // 	input[0].value = input[1].value * arrRate[0].value / arrRate[1].value;
+			// // })
+			
+			// input[0].addEventListener("change", () => convert(1, 0));
+			// // select[0].addEventListener("change", () => {
+			// // 	input[1].value = input[0].value * arrRate[1].value / arrRate[0].value;
+			// // })
+
+			// input[1].addEventListener("change", () => convert(0, 1));
+			// // select[1].addEventListener("change", () => {
+			// // 	input[0].value = input[1].value * arrRate[0].value / arrRate[1].value;
+			// // })
+			// ---------------------------------------------------------------------------------
 			
 
 			showRate.innerHTML = `${fromCurrencySymbol}${(defaultNum).toFixed(2)} ${from} = ${toCurrencySymbol}${(fromToRate).toFixed(4)} ${to}`;
@@ -72,7 +107,6 @@ const allCurrencies = (from, to, firstFunction) => {
 			fcs.innerHTML = fromCurrencySymbol;
 			tcs.innerHTML = toCurrencySymbol;
 
-			toInput.value = (fromInput.value * fromToRate).toFixed();
 		})
 }
 // END: List of all currencies /////////////////////////////////////////////////////
@@ -192,6 +226,6 @@ trans.addEventListener("submit", (e) => {
 
 // START: first loaded (default) ///////////////////////////////////////////////////
 $(document).ready(() => {
-	converter("CAD", "JPY", 0);
+	converter("CAD", "JPY");
 })
 // END: first loaded (default) ///////////////////////////////////////////////////
