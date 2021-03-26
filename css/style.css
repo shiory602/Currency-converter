@@ -25,7 +25,7 @@ h1 {
   background-color: #373737;
 }
 
-@media screen and (max-width: 480px) {
+@media (max-width: 480px) {
   h1 {
     width: 300px;
   }

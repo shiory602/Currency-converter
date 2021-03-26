@@ -25,7 +25,7 @@ h1 {
 	background-color: #373737
 }
 
-@media screen and (max-width:480px) {
+@media (max-width:480px) {
 	h1 {
 		width: 300px;
 	}
@@ -34,6 +34,16 @@ h1 {
 #showRate {
 	overflow-x: scroll;
 }
+
+// .draw-chart {
+// 	width: 400px; height: 300px
+// }
+
+// @media (max-width : 480px) {
+// 	.draw-chart {
+// 		width: 300px; height: 300px
+// 	}
+// }
 
 #DateTimeDisp {
 	font-size: 0.9rem;

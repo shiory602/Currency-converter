@@ -47,9 +47,6 @@ const allCurrencies = (from, to, rate) => {
 			return res.json();
 		})
 		.then(data => {
-			console.log(data);
-			console.log(rate);
-
 			let defaultNum = 1;
 			let fromc = from;
 			let toc = to;
@@ -96,7 +93,7 @@ const allCurrencies = (from, to, rate) => {
 // START: Historical Data (Experimental, Date Range) ////////////////////////////////////
 const HistoricalData = (from, to, start, end) => {
 	let url = `${BASE_URL}/api/v7/convert?apiKey=${ACCESS_KEY}&q=${from}_${to},${to}_${from}&compact=ultra&date=${start}&endDate=${end}`;
-	// url = "historicalData.json";
+	url = "historicalData.json";
 	fetch(url)
 		.then(res => {
 			if (res.status !== 200) {
