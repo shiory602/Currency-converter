@@ -30,7 +30,7 @@ const converter = (from, to) => {
 		})
 		.then(data => {
 			allCurrencies(from, to, data);
-			HistoricalData(from, to, "2021-03-14", "2021-03-22");
+			HistoricalData(from, to, "2021-03-18", "2021-03-26");
 		})
 }
 // END: Main current currencies /////////////////////////////////////////////////////
@@ -74,7 +74,6 @@ const allCurrencies = (from, to, rate) => {
 
 			
 			// input --------------------------------------------------------------------------
-			
 			fromInput.value = (defaultNum).toFixed(4);
 			toInput.value = (fromInput.value * fromToRate).toFixed(4);
 			// ---------------------------------------------------------------------------------
@@ -139,10 +138,10 @@ function drawChart() {
 	// データテーブルの作成
 	var data = google.visualization.arrayToDataTable([
 		['Date', 'CAD-JPY'],
-		['03-15', 87.369315],
-		['03-16', 87.468623],
-		['03-18', 87.622879],
-		['03-20', 87.869315]
+		['03-18', 87.369315],
+		['03-21', 87.468623],
+		['03-24', 87.622879],
+		['03-26', 87.869315]
 	]);
 	// グラフのオプションを設定
 	var options = {
@@ -173,16 +172,12 @@ function drawChart() {
 let switchFunc = () => {
 	let from = fromSelect.value;
 	let to = toSelect.value;
-	// let fromAmount = fromInput.value;
-	// let toAmount = toInput.value;
 	let fromCurrencySymbol = fcs.innerHTML;
 	let toCurrencySymbol = tcs.innerHTML;
 
 	converter(to, from, toInput.value);
 	toSelect.value = from;
 	fromSelect.value = to;
-	// fromInput.value = toAmount;
-	// toInput.value = fromAmount;
 	fcs.innerHTML = toCurrencySymbol;
 	tcs.innerHTML = fromCurrencySymbol;
 }
