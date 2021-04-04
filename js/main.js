@@ -72,12 +72,11 @@ const allCurrencies = (from, to, rate) => {
 			// ---------------------------------------------------------------------------------
 
 
-			
 			// input --------------------------------------------------------------------------
 			fromInput.value = (defaultNum).toFixed(4);
 			toInput.value = (fromInput.value * fromToRate).toFixed(4);
 			// ---------------------------------------------------------------------------------
-			
+
 
 			showRate.innerHTML = `${fromCurrencySymbol}${(defaultNum).toFixed(4)} ${from} = ${toCurrencySymbol}${(fromToRate).toFixed(4)} ${to}`;
 			// "1 CAD $ = 0.839 JPY"
@@ -159,14 +158,14 @@ function drawChart() {
 // END: graph of current chart ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// // update data every 30 mins
-// let setC;
-// let reloadDisplay = (v) => {
-// 	setC = setTimeout(function () {
-// 		getResults(v);
-// 		reloadDisplay(v);
-// 	}, 180000);
-// }
+// update data every 30 mins
+let setC;
+let reloadDisplay = (v) => {
+	setC = setTimeout(function () {
+		getResults(v);
+		reloadDisplay(v);
+	}, 180000);
+}
 
 // START: switch button //////////////////////////////////////////////////////////////
 let switchFunc = () => {
