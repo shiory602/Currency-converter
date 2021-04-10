@@ -9,22 +9,23 @@ Since I stay in Canada, I often use these kind of converters. Then sometimes fee
 
 I also tried to make beautiful layout even for mobile friendly. You can enjoy this app both web browsers and mobile devices.
 
-<!-- # UI Design
-![UI](./design.png)
+# UI Design
+![UI](./img/work-currencyConverter.png)
 
 I created UI design with [figma](https://www.figma.com/design/).
-I arranged UI design during developing so first image is a little bit different from others. There are two types of background, daytime and nighttime. Also it will be changed depend on the local weather. -->
+On the left side, I put a converter. You can choose countries from the list. Also on the right side, I put graph which show the latest week.
 
 # Languages
 - HTML / CSS
 - Javascript
 
-Since I practice to use Javascript, this is the main language I use.
+I wanted to practice to use fetch in Javascript.
 
 # Upcoming Features
 - calculator
 - Yearly rate graph
+- The latest weekly graph(reflects fetch data)
 
 # References
-[API](https://www.currencyconverterapi.com/)
+[Free API](https://free.currencyconverterapi.com/)
 
